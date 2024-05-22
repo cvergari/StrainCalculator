@@ -1,0 +1,18 @@
+.. guide:
+
+About this guide 
+=================
+
+This guide is made with `sphinx <https://www.sphinx-doc.org/>`_ . The sources of the guide are in `/docs_source`, but most of the contents of the guide are directly written within the Matlab code as docstrings.
+
+When modifying the guide, for instance by changing the docstrings or the .rst files, it must be:
+
+	- compiled
+	- copied in the `/docs` folder
+
+Sphinx can be installed in `conda <https://docs.conda.io>`_ , and it requires the additional package of `sphinxcontrib-matlabdomain <https://github.com/sphinx-contrib/matlabdomain>`_.
+Once these packages are installed (optimally in a conda environment), the documentation can be compiled by typing `make html` in the docs_source folder. `make.bat` is a batch file that creates the HTML guide and copies the files. Use it as:
+
+   make html
+
+

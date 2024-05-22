@@ -1,0 +1,42 @@
+.. examples:
+
+Examples
+============================================
+
+Available examples:
+--------------------
+
+:ref:`Getting started`
+
+.. mat:automodule:: StrainCalculator.Examples
+   :private-members:
+   
+   
+Getting started
+++++++++++++++++
+
+.. mat:autoscript:: getting_started
+
+
+:ref:`Plot Strains`
+
+Plot Strains
+++++++++++++++++
+
+.. mat:autoscript:: plot_strains
+
+
+:ref:`Compare Strains`
+
+Compare Strains
+++++++++++++++++
+
+.. mat:autoscript:: compare_strains
+
+
+:ref:`Strains with rotation`
+
+Strains with rotation
+++++++++++++++++++++++
+
+.. mat:autoscript:: strains_with_rotation

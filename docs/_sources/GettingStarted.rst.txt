@@ -1,0 +1,8 @@
+Getting started
+============================================
+
+.. mat:automodule:: StrainCalculator.Examples
+   :private-members:
+   
+   
+.. mat:autoscript:: getting_started

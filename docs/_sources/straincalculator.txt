@@ -1,0 +1,17 @@
+Strain Calculator
+==========================================	
+
+
+.. _StrainCalculator:
+
+.. currentmodule:: StrainCalculator
+
+.. automodule:: StrainCalculator
+   :private-members:
+  
+   .. autoclass:: StrainCalculator
+    :show-inheritance:
+    :members:	
+    :private-members:	
+	
+	

@@ -1,0 +1,54 @@
+StrainCalculator's documentation!
+============================================
+
+This is a toolbox to compute strain fields from a series of positions of a moving/straining grid. The typical application of this method is in the field of digital image correlation (DIC): a series of images are acquired of a sample being strained, so that each image represents a loading step. A grid is defined in the first image, and then all the elements of the grid are tracked, using DIC, in the following images. 
+
+.. figure:: images/pointcloud.gif
+   :width: 300
+   
+   Source: `µDIC <https://mudic.readthedocs.io/en/latest/index.html>`_ 
+   
+
+The positions of each grid element at each loading step are the input. Displacement of the grid elements are calculated by the toolbox, and then strains.
+
+Strain can be computed with the following methods:
+
+  -  :meth:`Engineering strain <StrainCalculator.StrainCalculator.StrainEng>`
+  -  :meth:`Log strain <StrainCalculator.StrainCalculator.StrainLog>`
+  -  :meth:`Infinitesimal strain (todo) <StrainCalculator.StrainCalculator.StrainInfinitesimal>`
+  -  :meth:`Almansi strain <StrainCalculator.StrainCalculator.StrainAlmansi>`
+  -  :meth:`Green strain <StrainCalculator.StrainCalculator.StrainGreen>`
+  -  :meth:`True strain <StrainCalculator.StrainCalculator.StrainTrue>`
+ 
+
+Contents:
+------------------
+
+.. toctree::
+   :maxdepth: 3
+   :name: overview
+
+   straincalculator.txt
+   examples.txt
+   this_guide.txt
+
+* :ref:`genindex`
+
+Useful link and resources:
+----------------------------
+
+Books
++++++++++++++
+
+   - `Nonlinear Continuum Mechanics for Finite Element Analysis. <https://www.cambridge.org/core/books/nonlinear-continuum-mechanics-for-finite-element-analysis/67AD6DBAAB77E755C09E7FB82565DA0B>`_. Javier Bonet, Richard D. Wood. 
+   - `Basic Engineering Plasticity. An Introduction with Engineering and Manufacturing Applications <https://www.sciencedirect.com/book/9780750680257/basic-engineering-plasticity>`_ . D.W.A. Rees.
+   
+   
+
+Links
+++++++++
+
+   - `Analysis of deformation <https://www.comsol.com/multiphysics/analysis-of-deformation>`_ (Comsol documentation).
+   - `Continuum Mechanics <https://www.continuummechanics.org/>`_ (Principles of finite deformation continuum mechanics, by Bob McGint).
+   
+

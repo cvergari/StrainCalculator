@@ -1,0 +1,612 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Strain Calculator &#8212; Strain Calculator 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="StrainCalculator’s documentation!" href="index.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mat-modindex.html" title="MATLAB Module Index"
+             >matlab index</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="StrainCalculator’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strain Calculator 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Strain Calculator</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="strain-calculator">
+<h1>Strain Calculator<a class="headerlink" href="#strain-calculator" title="Permalink to this heading">¶</a></h1>
+<span class="target" id="module-StrainCalculator"><span id="straincalculator"></span></span><dl class="mat class">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">StrainCalculator.</span></span><span class="sig-name descname"><span class="pre">StrainCalculator</span></span><a class="headerlink" href="#StrainCalculator.StrainCalculator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref mat mat-class docutils literal notranslate"><span class="pre">handle</span></code></p>
+<p>S = StrainCalculator()</p>
+<p>StrainCalculator calculates strains of a flat 2D regular grid
+undergoing a series of deformations, resulting in displacements of
+the original grid. A typical application is the post-processing of
+<a class="reference external" href="https://en.wikipedia.org/wiki/Digital_image_correlation_and_tracking">Digital Image Correlation (DIC)</a>
+methods. In brief, a virtual or physical grid is somehow <a class="reference external" href="https://digitalimagecorrelation.org/#patterning">applied to
+the sample</a>, and
+the sample is then loaded in a given number of
+loading steps. The position of each grid element is retrieved at
+each step, and their displacement is calculated. For example:</p>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="_images/pointcloud.gif"><img alt="Series of grid deformations" src="_images/pointcloud.gif" style="width: 283.8px; height: 216.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">An example of a planar grid undergoing a series of deformations.
+Source: Source: <a class="reference external" href="https://mudic.readthedocs.io/en/latest/index.html">µDIC</a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>StrainCalculator() can use the displacements of the grid at each step
+to compute a strain map.</p>
+<p>Context:</p>
+<p>Several toolboxes are available online for the processing of DIC data
+and calculation of strains. However, the strain calculation is often
+well hidden or not well documentent. The aim of this toolbox is to
+propose different methods to calculate strains, with clear
+documentation and examples.
+This program is aimed at engineers, engineering students,
+but also researchers using DIC and wishing to
+better understand what is calculated. Its aim is mostly educational.</p>
+<p class="rubric">Example</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">StrainCalculator</span><span class="p">();</span>
+<span class="n">obj</span><span class="p">.</span><span class="n">generateFakeData</span><span class="p">(</span><span class="s">&#39;HorizontalCompression&#39;</span><span class="p">);</span>
+<span class="n">obj</span><span class="p">.</span><span class="n">calculateStrains</span><span class="p">;</span>
+
+<span class="k">for</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">obj</span><span class="p">.</span><span class="n">nSteps</span>
+<span class="w">    </span><span class="nb">cla</span>
+<span class="w">    </span><span class="n">obj</span><span class="p">.</span><span class="n">plotStrain</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">    </span><span class="nb">pause</span><span class="p">(</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Strains should be provided as an X and Y array of cells, each
+containing the X and Y positions of the grid elements at each time
+step.
+For more detailed instructions look at the <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Add documentation for strain functions returning [X,Y,XY] (and
+adapt variable names)</p>
+</div>
+<div class="admonition-todo admonition" id="id2">
+<p class="admonition-title">Todo</p>
+<p>Add parfor to documentation (as well as the procedure to choose
+and dispatch strain calculation method)</p>
+</div>
+<div class="members docutils container">
+<dl>
+<dt>Property Summary</dt><dd><dl class="mat attribute">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.XgridSpacing">
+<span class="sig-name descname"><span class="pre">XgridSpacing</span></span><a class="headerlink" href="#StrainCalculator.StrainCalculator.XgridSpacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the initial grid in the horizontal direction (a scalar).
+This is dynamically calculated from the first step of the positions.
+It also assumes that the initial spacing is regular (all elements have the same size)</p>
+</dd></dl>
+
+<dl class="mat attribute">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.YgridSpacing">
+<span class="sig-name descname"><span class="pre">YgridSpacing</span></span><a class="headerlink" href="#StrainCalculator.StrainCalculator.YgridSpacing" title="Permalink to this definition">¶</a></dt>
+<dd><p>The size of the initial grid in the vertical direction (a scalar).</p>
+</dd></dl>
+
+<dl class="mat attribute">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.displacements">
+<span class="sig-name descname"><span class="pre">displacements</span></span><a class="headerlink" href="#StrainCalculator.StrainCalculator.displacements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displacements are calculated dynamically from the provided displacements.
+The returned variable is a structure with an X and Y field. X and Y are
+arrays of cells, containing displacements for each step. Displacements are
+calculated relative to the initial positions.
+For each loading step <em>n</em>, we have:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">displacement</span><span class="p">.</span><span class="n">X</span><span class="p">{</span><span class="n">n</span><span class="p">}</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Xpositions</span><span class="p">{</span><span class="n">n</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Xpositions</span><span class="p">{</span><span class="mi">1</span><span class="p">};</span>
+<span class="n">displacement</span><span class="p">.</span><span class="n">Y</span><span class="p">{</span><span class="n">n</span><span class="p">}</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Ypositions</span><span class="p">{</span><span class="n">n</span><span class="p">}</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Ypositions</span><span class="p">{</span><span class="mi">1</span><span class="p">};</span>
+</pre></div>
+</div>
+<p>From a mathematical point of view, let <span class="math notranslate nohighlight">\(\textbf{X}\)</span> denote the original locations
+of a material particle. At time <span class="math notranslate nohighlight">\(\textbf{t}\)</span> (or step <em>n</em>), the vector pointing
+to the new position of a point in the body, from its original location, is
+<span class="math notranslate nohighlight">\(\textbf{u}(\textbf{X},t)\)</span>.
+Since the original coordinates are the independent variables, this is
+a Lagrangian formulation. Thus, the displacement provides the
+transformation from the material to the spatial frame,
+<span class="math notranslate nohighlight">\(\textbf{x}=\textbf{X}+\textbf{u}\)</span>.</p>
+</dd></dl>
+
+<dl class="mat attribute">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.nSteps">
+<span class="sig-name descname"><span class="pre">nSteps</span></span><a class="headerlink" href="#StrainCalculator.StrainCalculator.nSteps" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of steps</p>
+</dd></dl>
+
+<dl class="mat attribute">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.nWorkers">
+<span class="sig-name descname"><span class="pre">nWorkers</span></span><a class="headerlink" href="#StrainCalculator.StrainCalculator.nWorkers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parallel workers</p>
+</dd></dl>
+
+<dl class="mat attribute">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.strain">
+<span class="sig-name descname"><span class="pre">strain</span></span><a class="headerlink" href="#StrainCalculator.StrainCalculator.strain" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain structure</p>
+</dd></dl>
+
+</dd>
+<dt>Method Summary</dt><dd><dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.DeformationGradientTensor">
+<span class="sig-name descname"><span class="pre">DeformationGradientTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.DeformationGradientTensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>F = DeformationGradient()</p>
+<p id="deformation-gradient">Calculates the deformation gradient F</p>
+<p>Definition;</p>
+<div class="math notranslate nohighlight">
+\[\textbf{F}=\frac{\textbf{x}}{\partial{\textbf{X}}}=
+\textbf{I}+\frac{\partial{\textbf{u}}}{\partial{\textbf{X}}}=
+\textbf{I}+\textbf{H}\]</div>
+<p>Where <strong>H</strong> is the displacement gradient tensor.
+In matrix form <strong>F</strong> is:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\textbf{F} = \begin{bmatrix}
+ \frac{\partial x}{\partial X} &amp; \frac{\partial x}{\partial Y} \\
+ \frac{\partial y}{\partial X} &amp; \frac{\partial y}{\partial Y}\\
+ \end{bmatrix}{}\end{split}\]</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>F in general is not symmetric!</p>
+</div>
+<p>In this code, the calculation of the gradient is implemented
+using the <cite>gradient()</cite> function. An alternative would be
+using an approach similar to the finite element method for
+each element of the grid. This would have the advantage of
+allowing to use higher-order polynomials to interpolate the
+displacements. This approach would also be useful is the grid
+was not horizontal/vertical, but at an angle.</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.DisplacementGradientTensor">
+<span class="sig-name descname"><span class="pre">DisplacementGradientTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.DisplacementGradientTensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>H = DisplacementGradientTensor()</p>
+<p>In matrix form:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\textbf{H} = \begin{bmatrix}
+ \frac{\partial u}{\partial X} &amp; \frac{\partial u}{\partial Y} \\
+ \frac{\partial v}{\partial X} &amp; \frac{\partial v}{\partial Y}\\
+ \end{bmatrix}{}\end{split}\]</div>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.RotationTensor">
+<span class="sig-name descname"><span class="pre">RotationTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.RotationTensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>[R, F] = RotationTensor(this)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><dl class="simple">
+<dt><em>R</em>, a matrix of cells where R{i, j, k} is the 2x2 rotation</dt><dd><p>tensor calculated at the ith step and at the jth row and
+kth column element.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><em>F</em>, a matrix of cells where F{i, j, k} is the 2x2 deformation</dt><dd><p>tensor calculated at the ith step and at the jth row and
+kth column element.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+<p>The <code class="xref mat mat-meth docutils literal notranslate"><span class="pre">DeformationGradient()</span></code>
+can be decomposed into stretch and rotation components, and
+therefore F can be expressed as <span class="math notranslate nohighlight">\(F = RU\)</span>, where R is
+the rotation tensor and U is the <a class="reference internal" href="#StrainCalculator.StrainCalculator.StretchTensor" title="StrainCalculator.StrainCalculator.StretchTensor"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">StretchTensor()</span></code></a>.
+Once the stretch tensor U is known, R can be evaluated as
+<span class="math notranslate nohighlight">\(R = FU^{-1}\)</span></p>
+<p>This method is not used in the toolbox, but it is kept
+for completeness</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainAlmansi">
+<span class="sig-name descname"><span class="pre">StrainAlmansi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">~</span></em>, <em class="sig-param"><span class="pre">Fmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainAlmansi" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain = StrainEulerian()</p>
+<p>TODO Called Almansi
+Calculates Eulerian strains, also called Almansi strains or spatial strains.</p>
+<p>Definition:</p>
+<blockquote>
+<div><p>The left Cauchy-Green tensor or Finger tensor is textbf{B}=textbf{F}textbf{F}^T)
+The Almansi strain tensor (or spatial strain tensor) is:</p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\textbf{e}^{*}=\frac{1}{2}(\textbf{I}-(\textbf{F}\textbf{F}^T)^{-1})\]</div>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainEng">
+<span class="sig-name descname"><span class="pre">StrainEng</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">~</span></em>, <em class="sig-param"><span class="pre">Hmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainEng" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain = calStraincEng()</p>
+<p>Calculates engineering strains for a given displacement graident
+tensor. Strains are directly updated as a property of the object (this.strain).</p>
+<p>Definition:</p>
+<blockquote>
+<div><table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Definitions</span><a class="headerlink" href="#id4" title="Permalink to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(e_{x}=\frac{\partial u}{\partial x}\)</span></p></td>
+<td><p>Horizontal strain</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(e_{y}=\frac{\partial v}{\partial y}\)</span></p></td>
+<td><p>Vertical strain</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(e_{xy}=\frac{1}{2}(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x})\)</span></p></td>
+<td><p>Shear strain</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>Engineering strain is also known as Eulerian infinitesimal
+strains.
+It can be decomposed in a strain matrix and rotation matrix:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}\textrm{strain matrix}=\begin{bmatrix}
+\frac{\partial{u}}{\partial{x}} &amp; \frac{1}{2}(\frac{\partial{u}}{\partial{y}} + \frac{\partial{v}}{\partial{x}} )  \\
+\frac{1}{2}(\frac{\partial{u}}{\partial{y}} +\frac{\partial{v}}{\partial{x}}) &amp; \frac{\partial{v}}{\partial{y}}
+\end{bmatrix}\end{split}\\\begin{split}\textrm{rotation matrix}=\begin{bmatrix}
+0 &amp; \frac{1}{2}(\frac{\partial{u}}{\partial{y}} - \frac{\partial{v}}{\partial{x}} )  \\
+-\frac{1}{2}(\frac{\partial{u}}{\partial{y}} +\frac{\partial{v}}{\partial{x}}) &amp; 0
+\end{bmatrix}\end{split}\end{aligned}\end{align} \]</div>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainGreen">
+<span class="sig-name descname"><span class="pre">StrainGreen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">~</span></em>, <em class="sig-param"><span class="pre">Fmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainGreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain = StrainGreen()</p>
+<p>Calculates right Green strains.</p>
+<p>Definition:</p>
+<blockquote>
+<div><p>The right Cauchy-Green deformation tensor can be
+calculated in terms of the deformation gradient <strong>F</strong> as
+<span class="math notranslate nohighlight">\(\textbf{C}=\textbf{F}^{T}\textbf{F}\)</span>. The Green
+strain tensor <strong>E</strong> (Lagrangian tensor, or material tensor) is:</p>
+</div></blockquote>
+<div class="math notranslate nohighlight">
+\[\textbf{E}=1/2(\textbf{C}-\textbf{I})=1/2(\textbf{F}^{T}\textbf{F}-\textbf{I})\]</div>
+<p>Where <span class="math notranslate nohighlight">\(\textbf{F}\)</span> is the
+<code class="xref mat mat-meth docutils literal notranslate"><span class="pre">deformation</span> <span class="pre">gradient</span></code>.</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainInfinitesimal">
+<span class="sig-name descname"><span class="pre">StrainInfinitesimal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">~</span></em>, <em class="sig-param"><span class="pre">Fmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainInfinitesimal" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain = StrainInfinitesimal()</p>
+<p>Also called linear strain tensor,
+or small strain tensor. It is equivalent to the engineering
+strain.</p>
+<p>The definition of the strain tensor is
+<span class="math notranslate nohighlight">\(\epsilon=\frac{1}{2}(\textbf{F}^{T}+\textbf{F})-\textbf{I}\)</span>,
+where H is grad of displacement (TODO).</p>
+<p>epsilon_cauchy = lambda - 1
+Si lambda - 1 &lt; 0.05
+TOTO Since it is limited to small def, it is quite
+independent from rotation, so it could be used for a material
+model law.</p>
+<p>TODO: should put to NaN if lambda-1 &gt; 0.05</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainLimits">
+<span class="sig-name descname"><span class="pre">StrainLimits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainLimits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate max and min strain in each available direction</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainLog">
+<span class="sig-name descname"><span class="pre">StrainLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">~</span></em>, <em class="sig-param"><span class="pre">Umat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain = StrainLog()</p>
+<p>Calculates logarithmic strains. Log strain (or Hencky strain)
+is defined as <span class="math notranslate nohighlight">\(H = ln(U)\)</span>, where <em>U</em> is the
+<a class="reference internal" href="#StrainCalculator.StrainCalculator.StretchTensor" title="StrainCalculator.StrainCalculator.StretchTensor"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">StretchTensor()</span></code></a>.</p>
+<p>In practice, a simple approach is to calculate <em>U</em> in the
+principal directions, and calculate the log in this reference:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\epsilon_P=\begin{bmatrix}
+\ln{(\lambda_1)} &amp; 0  \\
+0 &amp; \ln{(\lambda_2)}
+\end{bmatrix}\end{split}\]</div>
+<p>And then transform it back in the original coordinates.</p>
+<p>This could be further simplified because <span class="math notranslate nohighlight">\(C = U^T U\)</span>,
+this definition can be used:</p>
+<div class="math notranslate nohighlight">
+\[H = \ln(U) = \ln(\sqrt{C}) = 1/2 \ln(C)\]</div>
+<p>In uniaxial or biaxial tests, where principal directions can
+be assumed to be parallel to the grid; the calculation can be
+done directly:</p>
+<blockquote>
+<div><table class="docutils align-default" id="id5">
+<caption><span class="caption-text">Definitions</span><a class="headerlink" href="#id5" title="Permalink to this table">¶</a></caption>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\epsilon_{x}=\ln(1+\frac{\partial u}{\partial x})\)</span></p></td>
+<td><p>Horizontal strain</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\epsilon_{y}=\ln(1+\frac{\partial v}{\partial y})\)</span></p></td>
+<td><p>Vertical strain</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The unidimensional case can be calculated by integrating the
+incremental strain <span class="math notranslate nohighlight">\(\delta\epsilon=\delta l/ l\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\epsilon=\int_{}^{}\delta l/ l=\ln(l/l_{0})=\ln(1+\Delta l/l_{0})=\ln(1+e)\]</div>
+<p>Besides, the log strain tends to lose meaning when rotations
+are present. Just like in engineering strain, imagine a 45°
+rotation of an object, followed by a stretch along what was
+the x direction (and is now at 45°): this will appear as
+shear strain! This can be mitigated by calculating the log
+strains in the principal directions, and then rotating back
+to the original coordinate system.</p>
+<p>Keep in mind:</p>
+<blockquote>
+<div><p>While logarithmic measures of strain are a favorite in one-dimensional
+or semi-qualitative treatment, they have never been successfully applied in
+general. Such simplicity for certain problems as may result from a particular
+strain measure is bought at the cost of complexity for other problems</p>
+<p class="attribution">—Truesdell, Toupin: The Classical Field Theories</p>
+</div></blockquote>
+<p>Furthermore, log strains might not suitable to evaluate large
+shear strains; its application is still controversial. See:</p>
+<div class="admonition note">
+<p class="admonition-title">References</p>
+<p>Jonas et al., 2011. Problems with Using the Hencky Equivalent
+Strain in Simple Shear. Materials transactions 52(9).
+<a class="reference external" href="http://dx.doi.org/10.2320/matertrans.M2011086">DOI</a></p>
+<p>Onaka, 2015. Comment on “A comparison of the von
+Mises and Hencky equivalent strains for
+use in simple shear experiments”. Philosophical Magazine
+92(18): 2264-2271.
+<a class="reference external" href="http://dx.doi.org/10.1080/14786435.2012.671551">DOI</a>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Can I still use the elements outside the diagonal for
+strain?</p>
+</div>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainPrincipal">
+<span class="sig-name descname"><span class="pre">StrainPrincipal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainPrincipal" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain = StrainPrincipal()</p>
+<p>Computes principal strain from eigenvalues and eigenvectors
+of the strain tensor. Values will depend on the method
+chosen to compute strains.</p>
+<p>For each element <em>i</em> of the grid,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\textbf{E}^{(i)} = \begin{bmatrix}
+ E_{xx}^{(i)} &amp; E_{xy}^{(i)} \\
+ E_{xy}^{(i)} &amp; E_{yy}^{(i)}\\
+ \end{bmatrix}{}\end{split}\]</div>
+<p>We calculate the eigenvalues (which correspond to the first
+and second principal strains) and the eigenvectors (which
+correspond to the directions of the principal strains).</p>
+<p>The maximum shear is calculated as:</p>
+<div class="math notranslate nohighlight">
+\[\gamma_{max} = 0.5*(\max{([e_I, e_{II}])} - \min{([e_I, e_{II}])})\]</div>
+<p>A simple definition of Maximum shear is in:</p>
+<div class="admonition note">
+<p class="admonition-title">References</p>
+<p>Mapping 3D Strains with Ultrasound Speckle Tracking: Method Validation and
+Initial Results in Porcine Scleral Inflation.
+Cruz Perez et al., Annals of Biomedical Engineering 2015</p>
+</div>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StrainTrue">
+<span class="sig-name descname"><span class="pre">StrainTrue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">~</span></em>, <em class="sig-param"><span class="pre">Fmat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StrainTrue" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO
+I - (F’F)^-0.5</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.StretchTensor">
+<span class="sig-name descname"><span class="pre">StretchTensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.StretchTensor" title="Permalink to this definition">¶</a></dt>
+<dd><p>[U, F] = StretchTensor()</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><dl class="simple">
+<dt><em>U</em>, a matrix of cells where U{i, j, k} is the 2x2 stretch</dt><dd><p>tensor calculated at the ith step and at the jth row and
+kth column element.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><em>F</em>, a matrix of cells where F{i, j, k} is the 2x2 deformation</dt><dd><p>tensor calculated at the ith step and at the jth row and
+kth column element.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+<p>The stretch tensor is defined by decomposing the deformation
+gradient in a rotation tensor <em>R</em> and a stretch tensor <em>U</em>,
+as <span class="math notranslate nohighlight">\(F=RU\)</span>.
+From the right Cauchy-Green tensor:</p>
+<div class="math notranslate nohighlight">
+\[C = F^TF=U^TR^TRU\]</div>
+<p>Choosing U to be symmetric, it results <span class="math notranslate nohighlight">\(C=U^2\)</span>.
+Polar decomposition can be used to calculate the square root
+of U (i.e., of a symmetric tensor). First we express the
+tensor in its principal directions (so it will be diagonal),
+then we take the square root of the diagonal values, and
+finally rotate the tensor back in its initial orientation.</p>
+<p>In this implementation, we calculate the eigenvalues and
+eigenvectors of U^2, square the eigenvalues and replace them
+in the original orientation via:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}C = \sum_{\alpha}\lambda_{\alpha}^2 N_{\alpha}\otimes  N_{\alpha}\\U = \sum_{\alpha}\lambda_{\alpha} N_{\alpha}\otimes  N_{\alpha}\end{aligned}\end{align} \]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda_{\alpha}\)</span> is the square root of the
+<span class="math notranslate nohighlight">\(\alpha{th}\)</span> eigenvalue and <span class="math notranslate nohighlight">\(N_{\alpha}\)</span> is the
+corresponding eigenvector.</p>
+<p>The function also returns <em>F</em> for convenience</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.calcDisplacements">
+<span class="sig-name descname"><span class="pre">calcDisplacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.calcDisplacements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate displacements</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.calcStrain">
+<span class="sig-name descname"><span class="pre">calcStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em>, <em class="sig-param"><span class="pre">varargin</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.calcStrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>strain = calcStrain(Method)
+Calculates strains from provided positions
+Strain calculation method can be one of the following:</p>
+<ul class="simple">
+<li><p>EngStrain  (or Engineering)</p></li>
+<li><p>LogStrain  (or Log)</p></li>
+<li><p>Cauchy</p></li>
+<li><p>Green</p></li>
+<li><p>Almansi</p></li>
+<li><p>Infinitesimal</p></li>
+</ul>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.checkInput">
+<span class="sig-name descname"><span class="pre">checkInput</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">this</span></em><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.checkInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the validity of the properties</p>
+</dd></dl>
+
+<dl class="mat method">
+<dt class="sig sig-object mat" id="StrainCalculator.StrainCalculator.generateFakeData">
+<span class="sig-name descname"><span class="pre">generateFakeData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#StrainCalculator.StrainCalculator.generateFakeData" title="Permalink to this definition">¶</a></dt>
+<dd><p>…generates Fake Data.</p>
+<p>Optional parameters:</p>
+<dl class="simple">
+<dt>‘type’:</dt><dd><dl class="simple">
+<dt>Type of strain configuration</dt><dd><ul class="simple">
+<li><p>HorizontalTension (Default)</p></li>
+<li><p>HorizontalCompression</p></li>
+<li><p>VerticalCompression</p></li>
+<li><p>VerticalTension</p></li>
+<li><p>HorizontalShear</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>‘maxStrain’: maximum value of strain</dt><dd><p>Default: 0.1 (10%)</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>obj = StrainCalculator();
+obj.generateFakeData(‘HorizontalCompression’);
+obj.calculateStrains;</p>
+</dd></dl>
+
+</dd>
+<dt>Other</dt><dd></dd>
+</dl>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">StrainCalculator’s documentation!</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="examples.html"
+                          title="next chapter">Examples</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mat-modindex.html" title="MATLAB Module Index"
+             >matlab index</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="StrainCalculator’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strain Calculator 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Strain Calculator</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, Claudio Vergari.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

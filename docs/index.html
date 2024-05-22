@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>StrainCalculator’s documentation! &#8212; Strain Calculator 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Strain Calculator" href="straincalculator.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mat-modindex.html" title="MATLAB Module Index"
+             >matlab index</a> |</li>
+        <li class="right" >
+          <a href="straincalculator.html" title="Strain Calculator"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Strain Calculator 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">StrainCalculator’s documentation!</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="straincalculator-s-documentation">
+<h1>StrainCalculator’s documentation!<a class="headerlink" href="#straincalculator-s-documentation" title="Permalink to this heading">¶</a></h1>
+<p>This is a toolbox to compute strain fields from a series of positions of a moving/straining grid. The typical application of this method is in the field of digital image correlation (DIC): a series of images are acquired of a sample being strained, so that each image represents a loading step. A grid is defined in the first image, and then all the elements of the grid are tracked, using DIC, in the following images.</p>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="_images/pointcloud.gif"><img alt="_images/pointcloud.gif" src="_images/pointcloud.gif" style="width: 300px;" /></a>
+<figcaption>
+<p><span class="caption-text">Source: <a class="reference external" href="https://mudic.readthedocs.io/en/latest/index.html">µDIC</a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<p>The positions of each grid element at each loading step are the input. Displacement of the grid elements are calculated by the toolbox, and then strains.</p>
+<p>Strain can be computed with the following methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="straincalculator.html#StrainCalculator.StrainCalculator.StrainEng" title="StrainCalculator.StrainCalculator.StrainEng"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">Engineering</span> <span class="pre">strain</span></code></a></p></li>
+<li><p><a class="reference internal" href="straincalculator.html#StrainCalculator.StrainCalculator.StrainLog" title="StrainCalculator.StrainCalculator.StrainLog"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">Log</span> <span class="pre">strain</span></code></a></p></li>
+<li><p><a class="reference internal" href="straincalculator.html#StrainCalculator.StrainCalculator.StrainInfinitesimal" title="StrainCalculator.StrainCalculator.StrainInfinitesimal"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">Infinitesimal</span> <span class="pre">strain</span> <span class="pre">(todo)</span></code></a></p></li>
+<li><p><a class="reference internal" href="straincalculator.html#StrainCalculator.StrainCalculator.StrainAlmansi" title="StrainCalculator.StrainCalculator.StrainAlmansi"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">Almansi</span> <span class="pre">strain</span></code></a></p></li>
+<li><p><a class="reference internal" href="straincalculator.html#StrainCalculator.StrainCalculator.StrainGreen" title="StrainCalculator.StrainCalculator.StrainGreen"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">Green</span> <span class="pre">strain</span></code></a></p></li>
+<li><p><a class="reference internal" href="straincalculator.html#StrainCalculator.StrainCalculator.StrainTrue" title="StrainCalculator.StrainCalculator.StrainTrue"><code class="xref mat mat-meth docutils literal notranslate"><span class="pre">True</span> <span class="pre">strain</span></code></a></p></li>
+</ul>
+</div></blockquote>
+<section id="contents">
+<h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="overview">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="straincalculator.html">Strain Calculator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#available-examples">Available examples:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#getting-started">Getting started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#plot-strains">Plot Strains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#compare-strains">Compare Strains</a></li>
+<li class="toctree-l3"><a class="reference internal" href="examples.html#strains-with-rotation">Strains with rotation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="this_guide.html">About this guide</a></li>
+</ul>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+</ul>
+</section>
+<section id="useful-link-and-resources">
+<h2>Useful link and resources:<a class="headerlink" href="#useful-link-and-resources" title="Permalink to this heading">¶</a></h2>
+<section id="books">
+<h3>Books<a class="headerlink" href="#books" title="Permalink to this heading">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://www.cambridge.org/core/books/nonlinear-continuum-mechanics-for-finite-element-analysis/67AD6DBAAB77E755C09E7FB82565DA0B">Nonlinear Continuum Mechanics for Finite Element Analysis.</a>. Javier Bonet, Richard D. Wood.</p></li>
+<li><p><a class="reference external" href="https://www.sciencedirect.com/book/9780750680257/basic-engineering-plasticity">Basic Engineering Plasticity. An Introduction with Engineering and Manufacturing Applications</a> . D.W.A. Rees.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="links">
+<h3>Links<a class="headerlink" href="#links" title="Permalink to this heading">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference external" href="https://www.comsol.com/multiphysics/analysis-of-deformation">Analysis of deformation</a> (Comsol documentation).</p></li>
+<li><p><a class="reference external" href="https://www.continuummechanics.org/">Continuum Mechanics</a> (Principles of finite deformation continuum mechanics, by Bob McGint).</p></li>
+</ul>
+</div></blockquote>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">StrainCalculator’s documentation!</a><ul>
+<li><a class="reference internal" href="#contents">Contents:</a></li>
+<li><a class="reference internal" href="#useful-link-and-resources">Useful link and resources:</a><ul>
+<li><a class="reference internal" href="#books">Books</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="straincalculator.html"
+                          title="next chapter">Strain Calculator</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mat-modindex.html" title="MATLAB Module Index"
+             >matlab index</a> |</li>
+        <li class="right" >
+          <a href="straincalculator.html" title="Strain Calculator"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">Strain Calculator 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">StrainCalculator’s documentation!</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, Claudio Vergari.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>

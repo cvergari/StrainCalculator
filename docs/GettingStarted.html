@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Getting started &#8212; StrainCalculator 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Strain Calculator" href="StrainCalculator.html" />
+    <link rel="prev" title="StrainCalculator’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-StrainCalculator.Examples">
+<span id="getting-started"></span><h1>Getting started<a class="headerlink" href="#module-StrainCalculator.Examples" title="Permalink to this headline">¶</a></h1>
+<dl class="mat script">
+<dt class="sig sig-object mat" id="StrainCalculator.Examples.getting_started">
+<span class="sig-prename descclassname"><span class="pre">StrainCalculator.Examples.</span></span><span class="sig-name descname"><span class="pre">getting_started</span></span><a class="headerlink" href="#StrainCalculator.Examples.getting_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>StrainCalculator calculates strains from a displacement field. One way to
+use it, is to generate a grid and the position of each grid element at
+each time step. Then we’ll let StrainCalculator compute displacements and
+strains, and we will compare the strains to known values.</p>
+<p>Let’s first create the object, and a simple grid:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Create object</span><span class="w"></span>
+<span class="n">obj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">StrainCalculator</span><span class="p">();</span><span class="w"></span>
+
+<span class="c">% Generate grid</span><span class="w"></span>
+<span class="p">[</span><span class="n">X0</span><span class="p">,</span><span class="w"> </span><span class="n">Y0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">meshgrid</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">);</span><span class="w"></span>
+<span class="c">% Center grid for convenience</span><span class="w"></span>
+<span class="n">X0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">X0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
+<span class="n">Y0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Y0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"></span>
+<span class="c">% Plot</span><span class="w"></span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">X0</span><span class="p">(:),</span><span class="w"> </span><span class="n">Y0</span><span class="p">(:),</span><span class="s">&#39;b.&#39;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The grid spacing is 1 both in the horizontal and vertical direction. This
+will be automatically computed by StrainCalculator, as it assumes an
+homogeneous grid.</p>
+<p>Now we have to stretch the grid. Let’s simulate a tension test in the
+horizontal direction , from rest to 10% strain (as engineering strain)
+in 10 loading steps.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Store grid elements position at each step</span><span class="w"></span>
+<span class="n">X</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">cell</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+<span class="n">Y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">cell</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span><span class="w"></span>
+
+<span class="n">max_step</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span><span class="w"></span>
+<span class="c">% Notice that *step* starts from zero to store the resting step</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="nb">step</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">max_step</span><span class="w"></span>
+<span class="w">    </span><span class="n">current_strain</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">step</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_step</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">X</span><span class="p">{</span><span class="nb">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">X0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X0</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">current_strain</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">Y</span><span class="p">{</span><span class="nb">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Y0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Y0</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">current_strain</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="mf">0.5</span><span class="p">;</span><span class="w">  </span><span class="c">% Assume Poisson&#39;s ratio = -0.5;</span><span class="w"></span>
+<span class="w"> </span><span class="k">end</span><span class="w"></span>
+
+<span class="w"> </span><span class="c">% Plot final grid</span><span class="w"></span>
+<span class="w"> </span><span class="nb">hold</span><span class="w"> </span><span class="n">on</span><span class="p">;</span><span class="w"></span>
+<span class="w"> </span><span class="nb">plot</span><span class="p">(</span><span class="n">X</span><span class="p">{</span><span class="k">end</span><span class="p">}(:),</span><span class="w"> </span><span class="n">Y</span><span class="p">{</span><span class="k">end</span><span class="p">}(:),</span><span class="s">&#39;r.&#39;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>We computed the position of each grid element at each step, so not we are
+ready to calculate strains:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span><span class="p">.</span><span class="n">calcStrain</span><span class="p">(</span><span class="s">&#39;Engineering&#39;</span><span class="p">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Done! Now you can check that the final horizontal engineering strain, in
+the final step, is 0.1 everywhere, as expected.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Assert equality tolerance for round-off errors</span><span class="w"></span>
+<span class="nb">assert</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">strain</span><span class="p">.</span><span class="n">X</span><span class="p">{</span><span class="k">end</span><span class="p">}(:)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">1e-7</span><span class="p">))</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The script also includes the plot of all loading steps. At the end, you
+should get something like this:</p>
+<figure class="align-default" id="id1">
+<img alt="_images/tension_last_step.png" src="_images/tension_last_step.png" />
+<figcaption>
+<p><span class="caption-text">Last step of a tension test in the horizontal direction. Note that the
+maximum horizontal engineering strain is 0.1, and the vertical one is
+0.05.</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">StrainCalculator</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="StrainCalculator.html">Strain Calculator</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="This_guide.html">About this guide</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">StrainCalculator’s documentation!</a></li>
+      <li>Next: <a href="StrainCalculator.html" title="next chapter">Strain Calculator</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Claudio Vergari.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/GettingStarted.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

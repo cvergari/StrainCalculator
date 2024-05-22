@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Examples &#8212; Strain Calculator 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="About this guide" href="this_guide.html" />
+    <link rel="prev" title="Strain Calculator" href="straincalculator.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="mat-modindex.html" title="MATLAB Module Index"
+             >matlab index</a> |</li>
+        <li class="right" >
+          <a href="this_guide.html" title="About this guide"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="straincalculator.html" title="Strain Calculator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strain Calculator 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Examples</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">¶</a></h1>
+<section id="available-examples">
+<h2>Available examples:<a class="headerlink" href="#available-examples" title="Permalink to this heading">¶</a></h2>
+<p><a class="reference internal" href="#getting-started"><span class="std std-ref">Getting started</span></a></p>
+<span class="target" id="module-StrainCalculator.examples"></span><section id="getting-started">
+<h3>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h3>
+<dl class="mat script">
+<dt class="sig sig-object mat" id="StrainCalculator.examples.getting_started">
+<span class="sig-prename descclassname"><span class="pre">StrainCalculator.examples.</span></span><span class="sig-name descname"><span class="pre">getting_started</span></span><a class="headerlink" href="#StrainCalculator.examples.getting_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>StrainCalculator calculates strains from a displacement field. One way to
+use it, is to virtually generate a grid and the position of each grid element at
+each time step. In this example we will do just that, and then we will
+let StrainCalculator compute displacements and
+strains, and we will compare the strains to known values.</p>
+<p>Let’s first create the object, and a simple grid:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Create object</span>
+<span class="n">obj</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">StrainCalculator</span><span class="p">();</span>
+
+<span class="c">% Generate grid</span>
+<span class="p">[</span><span class="n">X0</span><span class="p">,</span><span class="w"> </span><span class="n">Y0</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">meshgrid</span><span class="p">(</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">);</span>
+<span class="c">% Center grid for convenience</span>
+<span class="n">X0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">X0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="n">Y0</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Y0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="c">% Plot</span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">X0</span><span class="p">(:),</span><span class="w"> </span><span class="n">Y0</span><span class="p">(:),</span><span class="s">&#39;b.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The grid spacing is 1 both in the horizontal and vertical direction. This
+will be automatically computed by StrainCalculator, as it assumes an
+homogeneous grid.</p>
+<p>Now we have to stretch the grid. Let’s simulate a tension test in the
+horizontal direction , from rest to 10% strain (as engineering strain)
+in 10 loading steps.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Store grid elements position at each step</span>
+<span class="n">X</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">cell</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">Y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="nb">cell</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="n">max_step</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+<span class="c">% Notice that *step* starts from zero to store the resting step</span>
+<span class="k">for</span><span class="w"> </span><span class="nb">step</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">max_step</span>
+<span class="w">    </span><span class="n">current_strain</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">step</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">max_step</span><span class="p">;</span>
+<span class="w">    </span><span class="n">X</span><span class="p">{</span><span class="nb">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">X0</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">X0</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">current_strain</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Y</span><span class="p">{</span><span class="nb">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Y0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Y0</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="n">current_strain</span><span class="w"> </span><span class="o">.*</span><span class="w"> </span><span class="mf">0.5</span><span class="p">;</span><span class="w">  </span><span class="c">% Assume Poisson&#39;s ratio = -0.5;</span>
+<span class="w"> </span><span class="k">end</span>
+
+<span class="w"> </span><span class="c">% Plot final grid</span>
+<span class="w"> </span><span class="nb">hold</span><span class="w"> </span><span class="n">on</span><span class="p">;</span>
+<span class="w"> </span><span class="nb">plot</span><span class="p">(</span><span class="n">X</span><span class="p">{</span><span class="k">end</span><span class="p">}(:),</span><span class="w"> </span><span class="n">Y</span><span class="p">{</span><span class="k">end</span><span class="p">}(:),</span><span class="s">&#39;r.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We computed the position of each grid element at each step, so not we are
+ready to calculate displacements and strains:</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="n">obj</span><span class="p">.</span><span class="n">calcStrain</span><span class="p">(</span><span class="s">&#39;Engineering&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Done! Now you can check that the final horizontal engineering strain. In
+the final step, strain is 0.1 everywhere, as expected.</p>
+<div class="highlight-matlab notranslate"><div class="highlight"><pre><span></span><span class="c">% Assert equality tolerance for round-off errors</span>
+<span class="nb">assert</span><span class="p">(</span><span class="nb">all</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">strain</span><span class="p">.</span><span class="n">X</span><span class="p">{</span><span class="k">end</span><span class="p">}(:)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">1e-7</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The script also includes the plot of all loading steps. At the end, you
+should get something like this:</p>
+<figure class="align-default" id="id1">
+<img alt="_images/tension_last_step.png" src="_images/tension_last_step.png" />
+<figcaption>
+<p><span class="caption-text">Last step of a tension test in the horizontal direction. Note that the
+maximum horizontal engineering strain is 0.1, and the vertical one is
+0.05 (Poisson’s ratio = -0.5).</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd></dl>
+
+<p><a class="reference internal" href="#plot-strains"><span class="std std-ref">Plot Strains</span></a></p>
+</section>
+<section id="plot-strains">
+<h3>Plot Strains<a class="headerlink" href="#plot-strains" title="Permalink to this heading">¶</a></h3>
+<dl class="mat script">
+<dt class="sig sig-object mat" id="StrainCalculator.examples.plot_strains">
+<span class="sig-prename descclassname"><span class="pre">StrainCalculator.examples.</span></span><span class="sig-name descname"><span class="pre">plot_strains</span></span><a class="headerlink" href="#StrainCalculator.examples.plot_strains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Help of plot strains</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#compare-strains"><span class="std std-ref">Compare Strains</span></a></p>
+</section>
+<section id="compare-strains">
+<h3>Compare Strains<a class="headerlink" href="#compare-strains" title="Permalink to this heading">¶</a></h3>
+<dl class="mat script">
+<dt class="sig sig-object mat" id="StrainCalculator.examples.compare_strains">
+<span class="sig-prename descclassname"><span class="pre">StrainCalculator.examples.</span></span><span class="sig-name descname"><span class="pre">compare_strains</span></span><a class="headerlink" href="#StrainCalculator.examples.compare_strains" title="Permalink to this definition">¶</a></dt>
+<dd><p>This script uses StrainCalculator to compare differnt types of strain definition.
+A fake data series is generated (using <code class="xref mat mat-meth docutils literal notranslate"><span class="pre">generateFakeData()</span></code>)
+to obtain a uniform deformation field. The deformation field is computed using the different
+methods available in <code class="xref mat mat-meth docutils literal notranslate"><span class="pre">calcStrain()</span></code>. Finally, all loading steps and all
+methods are plotted to be compared.</p>
+</dd></dl>
+
+<p><a class="reference internal" href="#strains-with-rotation"><span class="std std-ref">Strains with rotation</span></a></p>
+</section>
+<section id="strains-with-rotation">
+<h3>Strains with rotation<a class="headerlink" href="#strains-with-rotation" title="Permalink to this heading">¶</a></h3>
+<dl class="mat script">
+<dt class="sig sig-object mat" id="StrainCalculator.examples.strains_with_rotation">
+<span class="sig-prename descclassname"><span class="pre">StrainCalculator.examples.</span></span><span class="sig-name descname"><span class="pre">strains_with_rotation</span></span><a class="headerlink" href="#StrainCalculator.examples.strains_with_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This script uses StrainCalculator to compare differnt types of strain definition.
+A fake data series is generated (using <code class="xref mat mat-meth docutils literal notranslate"><span class="pre">generateFakeData()</span></code>)
+to obtain a uniform horizontal tension field <em>and a rigid rotation</em>.</p>
+<p>The Green deformation field is graphed at each step, while the average
+strain over the whole surface is plotted at the end, to compare the
+different computation methods.</p>
+<p>The latter plot highlights how engineering strain is sensitive to
+rotation: it increases and then decreases suggesting compression ,
+although the sample still undergoes tension (but it is rotated).
+Engineering strain and Almansi strain also show a “phantom” vertical
+component of strain.</p>
+<figure class="align-default" id="id2">
+<img alt="_images/strain_rotation_1.png" src="_images/strain_rotation_1.png" />
+<figcaption>
+<p><span class="caption-text">Last strain step, with the superimposition of a horizontal strain and
+a 60° counterclockwise rotation</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id3">
+<img alt="_images/strain_rotation_2.png" src="_images/strain_rotation_2.png" />
+<figcaption>
+<p><span class="caption-text">Comparison of the different strain calculations.</span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Examples</a><ul>
+<li><a class="reference internal" href="#available-examples">Available examples:</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li><a class="reference internal" href="#plot-strains">Plot Strains</a></li>
+<li><a class="reference internal" href="#compare-strains">Compare Strains</a></li>
+<li><a class="reference internal" href="#strains-with-rotation">Strains with rotation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="straincalculator.html"
+                          title="previous chapter">Strain Calculator</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="this_guide.html"
+                          title="next chapter">About this guide</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="mat-modindex.html" title="MATLAB Module Index"
+             >matlab index</a> |</li>
+        <li class="right" >
+          <a href="this_guide.html" title="About this guide"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="straincalculator.html" title="Strain Calculator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Strain Calculator 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Examples</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, Claudio Vergari.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    </div>
+  </body>
+</html>
