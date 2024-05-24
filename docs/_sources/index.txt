@@ -28,7 +28,7 @@ Contents:
    :maxdepth: 3
    :name: overview
 
-   straincalculator.txt
+   StrainCalculator.txt
    examples.txt
    this_guide.txt
 
